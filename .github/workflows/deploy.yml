@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+# Builds the Vite app and publishes it to GitHub Pages on every push to main.
+# The app is fully static: BIMFACE's data API is called directly from the
+# browser (CORS is open), so no server is needed. A viewToken is pasted into
+# the page at demo time — no secrets live in this repo.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+permissions:
+  contents: read
+  pages: write # write to the Pages deployment
+  id-token: write # OIDC token for the deployment
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: bimface-vue/package-lock.json
+
+      - name: Install & build
+        run: |
+          npm ci
+          npm run build
+        working-directory: bimface-vue
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: bimface-vue/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

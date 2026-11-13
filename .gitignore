@@ -1,0 +1,4 @@
+# belt & braces (bimface-vue/.gitignore already covers these)
+node_modules/
+dist/
+*.local

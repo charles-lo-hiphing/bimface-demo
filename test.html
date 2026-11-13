@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>My first BIMFACE app</title>
+    </head>
+<body>
+    <div id="domId" style="width:800px; height:600px"></div>
+    <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js" charset="utf-8"></script>
+    <script>
+        let viewer3D;
+        let app;
+        let viewToken = '7f236107fa76424381ffd2346b5fa536';
+        let loaderConfig = new BimfaceSDKLoaderConfig();
+            loaderConfig.viewToken = viewToken;
+        BimfaceSDKLoader.load(loaderConfig, successCallback, failureCallback);
+            function successCallback(viewMetaData) {
+                let domShow = document.getElementById('domId');
+                let webAppConfig = new Glodon.Bimface.Application.WebApplication3DConfig();
+                    webAppConfig.domElement = domShow;    
+                app = new Glodon.Bimface.Application.WebApplication3D(webAppConfig);    
+                app.addView(viewToken);
+                viewer3D = app.getViewer();
+                viewer3D.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.MouseClicked,getElementId);
+            };
+            function getElementId(clickData) {
+            console.log(clickData);
+            }
+            function failureCallback(error) {
+                console.log(error);
+            };
+    </script>
+</body>
+</html>
