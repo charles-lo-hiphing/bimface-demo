@@ -10,6 +10,12 @@ Charles Lo in `HH - BIMFace Testing List_v2_progress.xlsx`.
 
 ## Run it
 
+**Live (for colleagues):** https://charles-lo-hiphing.github.io/bimface-demo/ —
+open it and paste a fresh viewToken (BIMFACE console → file → 获取viewToken).
+Every push to `main` redeploys automatically (GitHub Actions → Pages).
+
+**Locally:**
+
 ```sh
 cd bimface-vue
 npm run dev          # -> http://localhost:5173
